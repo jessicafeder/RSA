@@ -10,6 +10,7 @@ import java.security.SecureRandom;
 
 public class Main {
 
+    /* Spara nycklar i filer */
     public static void saveKey(String fileName, KeyPair key) {
         try {
             FileOutputStream fileOut = new FileOutputStream(fileName);
@@ -22,6 +23,7 @@ public class Main {
         }
     }
 
+    /* Läsa in sparade nycklar */
     public static KeyPair readKey(String fileName) {
         KeyPair key = null;
         try {
@@ -36,6 +38,7 @@ public class Main {
         return key;
     }
 
+    /* Generera nycklar */
     public static void generateKeys(String fileName, int bitLength) {
         SecureRandom rand = new SecureRandom();
 
@@ -56,6 +59,7 @@ public class Main {
 
     }
 
+    /*  Kunna kryptera och dekryptera strängar */
     public static String encrypt(String message, KeyPair key){
         return (new BigInteger(message.getBytes())).modPow(key.getKey(), key.getN()).toString();
     }
@@ -65,13 +69,14 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        int bitLength = 4096;
-        /*KeyPair publicKey = readKey("Jessica_pub.key");
+        //int bitLength = 4096;
+        KeyPair publicKey = readKey("Jessica_pub.key");
         KeyPair privateKey = readKey("Jessica_priv.key");
-        String encrypted = encrypt("Hemligt meddelande", publicKey);
+        String encrypted = encrypt("Encrypting is fun!", publicKey);
+        System.out.println("Encrypted message is: " + encrypted);
         String clear = decrypt(encrypted, privateKey);
-        System.out.println(clear);*/
-        generateKeys("Jessica", bitLength);
+        System.out.println("Decrypted message is: " + clear);
+        //generateKeys("Jessica", bitLength);
 
     }
 }
