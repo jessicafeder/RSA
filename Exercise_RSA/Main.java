@@ -76,7 +76,7 @@ public class Main {
         System.out.println("Encrypted message is: " + encrypted);
         String clear = decrypt(encrypted, privateKey);
         System.out.println("Decrypted message is: " + clear);
-        //generateKeys("Jessica", bitLength);
+    
 
     }
 }
