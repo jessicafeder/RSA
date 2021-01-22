@@ -1,11 +1,13 @@
 package Exercise_RSA;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 
 public class Main {
@@ -67,16 +69,30 @@ public class Main {
     public static String decrypt(String message, KeyPair key){
         return new String((new BigInteger(message)).modPow(key.getKey(), key.getN()).toByteArray());
     }
+    
+    public static void encryptToFile(String message, KeyPair key, String fileName) throws FileNotFoundException, IOException {
+        String encrypted = encrypt(message, key);
+        FileOutputStream out = new FileOutputStream(fileName);
+        byte[] input = encrypted.getBytes(StandardCharsets.UTF_8);
+        out.write(input);
+        out.close();
+    }
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
         //int bitLength = 4096;
         KeyPair publicKey = readKey("Jessica_pub.key");
         KeyPair privateKey = readKey("Jessica_priv.key");
-        String encrypted = encrypt("Encrypting is fun!", publicKey);
+        String encrypted = encrypt("Hej", publicKey);
         System.out.println("Encrypted message is: " + encrypted);
         String clear = decrypt(encrypted, privateKey);
         System.out.println("Decrypted message is: " + clear);
-    
+        try {
+            encryptToFile("Hej", publicKey, "file.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }
