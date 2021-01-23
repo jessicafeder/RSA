@@ -160,7 +160,7 @@ def main():
     cipher = ''
     while True:
         print('                           ')
-        print('========CRYPTO MENU========')
+        print('===========MENU============')
         print('                           ')
         print('1. Generate new keys')
         print('2. Encrypt string')

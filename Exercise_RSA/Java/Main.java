@@ -15,8 +15,7 @@ import java.util.Scanner;
 public class Main {
 
     Main(){
-        /* int bitLength = 4096;
-        generateKeys("Jessica", bitLength); */
+        System.out.println("-------------------Crypto-------------------");
         KeyPair publicKey = readKey("Jessica_pub.key");
         KeyPair privateKey = readKey("Jessica_priv.key");
         String encrypted = encrypt("Moms spaguetti", publicKey);
@@ -38,6 +37,9 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+       /*  int bitLength = 4096;
+        generateKeys("Jessica", bitLength); */
     }
 
     private void generateKeys(String fileName, int bitLength) {
