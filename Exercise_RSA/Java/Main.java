@@ -14,34 +14,33 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void saveKey(String fileName, KeyPair key) {
+    Main(){
+        /* int bitLength = 4096;
+        generateKeys("Jessica", bitLength); */
+        KeyPair publicKey = readKey("Jessica_pub.key");
+        KeyPair privateKey = readKey("Jessica_priv.key");
+        String encrypted = encrypt("Moms spaguetti", publicKey);
+        System.out.println("Encrypted message is: " + encrypted);
+        String clear = decrypt(encrypted, privateKey);
+        System.out.println("Decrypted message is: " + clear);
         try {
-            FileOutputStream fileOut = new FileOutputStream(fileName);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(key);
-            out.close();
-            System.out.println("Saved key as " + fileName);
-        } catch (IOException i) {
-            i.printStackTrace();
+            encryptToFile("Moms spaguetti", publicKey, "file.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            decryptFromFile("file.txt", privateKey);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public static KeyPair readKey(String fileName) {
-        KeyPair key = null;
-        try {
-        
-            FileInputStream fileIn = new FileInputStream(fileName);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            key = (KeyPair) in.readObject();
-            in.close();
-            System.out.println("Read key from " + fileName);
-        } catch (IOException | ClassNotFoundException i) {
-            i.printStackTrace();
-        }
-        return key;
-    }
-
-    public static void generateKeys(String fileName, int bitLength) {
+    private void generateKeys(String fileName, int bitLength) {
         SecureRandom rand = new SecureRandom();
 
         BigInteger p = new BigInteger(bitLength / 2, 100, rand);
@@ -61,15 +60,42 @@ public class Main {
 
     }
 
-    public static String encrypt(String message, KeyPair key){
-        return (new BigInteger(message.getBytes())).modPow(key.getKey(), key.getN()).toString();
+    private void generateKeys(String fileName) {
+        generateKeys(fileName, 2048);
     }
 
-    public static String decrypt(String message, KeyPair key){
-        return new String((new BigInteger(message)).modPow(key.getKey(), key.getN()).toByteArray());
+    private void saveKey(String fileName, KeyPair key) {
+        try {
+            FileOutputStream fileOut = new FileOutputStream(fileName);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(key);
+            out.close();
+            System.out.println("Saved key as " + fileName);
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
+
+    private KeyPair readKey(String fileName) {
+        KeyPair key = null;
+        try {
+        
+            FileInputStream fileIn = new FileInputStream(fileName);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            key = (KeyPair) in.readObject();
+            in.close();
+            System.out.println("Read key from " + fileName);
+        } catch (IOException | ClassNotFoundException i) {
+            i.printStackTrace();
+        }
+        return key;
+    }
+
+    public String encrypt(String message, KeyPair key){
+        return (new BigInteger(message.getBytes())).modPow(key.getKey(), key.getN()).toString();
     }
     
-    public static void encryptToFile(String message, KeyPair key, String fileName) throws FileNotFoundException, IOException {
+    public void encryptToFile(String message, KeyPair key, String fileName) throws FileNotFoundException, IOException {
         String encrypted = encrypt(message, key);
         FileOutputStream out = new FileOutputStream(fileName);
         byte[] input = encrypted.getBytes(StandardCharsets.UTF_8);
@@ -78,38 +104,27 @@ public class Main {
         out.close();
     }
 
-    public static String decryptFromFile(String fileName, KeyPair key) throws FileNotFoundException, IOException {
+    public String decrypt(String message, KeyPair key){
+        return new String((new BigInteger(message)).modPow(key.getKey(), key.getN()).toByteArray());
+    }
+
+    public String decryptFromFile(String fileName, KeyPair key) throws FileNotFoundException, IOException {
         if (!fileName.contains(".txt")) {
             fileName = fileName + ".txt";
         }
-    
         StringBuilder sb = new StringBuilder();
         Scanner sc = new Scanner(new File(fileName));
         while (sc.hasNextLine()) {
             sb.append(sc.nextLine());
         }
         sc.close();
-        System.out.println("Message read from file " + fileName);
+        System.out.println("Message read from file " + sb);
         return decrypt(sb.toString(), key);
 
     }
 
-    public static void main(String[] args) throws FileNotFoundException, IOException {
-        // int bitLength = 4096;
-        // generateKeys("Jessica", bitLength);
-        KeyPair publicKey = readKey("Jessica_pub.key");
-        KeyPair privateKey = readKey("Jessica_priv.key");
-        String encrypted = encrypt("Hello", publicKey);
-        System.out.println("Encrypted message is: " + encrypted);
-        String clear = decrypt(encrypted, privateKey);
-        System.out.println("Decrypted message is: " + clear);
-        try {
-            encryptToFile("Hello", publicKey, "file.txt");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) {
+        new Main();
 
     }
 }
