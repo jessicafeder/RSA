@@ -177,7 +177,7 @@ def main():
         print()
         while True:
             menu_selection = input('> ')
-            if menu_selection in '12':
+            if menu_selection in '123459':
                 break
         if menu_selection == '1':
             name = input('Enter a name for the key files: ')
@@ -194,7 +194,7 @@ def main():
         elif menu_selection == '4':
             message = input('Enter message to encrypt to a txt file: ')
             cipher = encrypt(name, message)
-            with open('msg.txt', 'w') as out:
+            with open('data.txt', 'w') as out:
                 out.write(str(cipher))
 
         elif menu_selection == '5':
