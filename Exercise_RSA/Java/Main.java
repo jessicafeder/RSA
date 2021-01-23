@@ -12,18 +12,23 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Scanner;
 
-public class Main {
+public class Main{
 
     Main(){
         System.out.println("-------------------Crypto-------------------");
         KeyPair publicKey = readKey("Jessica_pub.key");
         KeyPair privateKey = readKey("Jessica_priv.key");
-        String encrypted = encrypt("Moms spaguetti", publicKey);
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Text to encrypt: ");
+        String message = sc.nextLine();
+        String encrypted = encrypt(message, publicKey);
         System.out.println("Encrypted message is: " + encrypted);
         String clear = decrypt(encrypted, privateKey);
         System.out.println("Decrypted message is: " + clear);
+        sc.close();
+
         try {
-            encryptToFile("Moms spaguetti", publicKey, "file.txt");
+            encryptToFile(message, publicKey, "file.txt");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -37,8 +42,8 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-       /*  int bitLength = 4096;
+ 
+       /* int bitLength = 4096;
         generateKeys("Jessica", bitLength); */
     }
 
