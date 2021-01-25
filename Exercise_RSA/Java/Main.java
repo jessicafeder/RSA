@@ -125,7 +125,7 @@ public class Main{
             sb.append(sc.nextLine());
         }
         sc.close();
-        System.out.println("Message read from file " + sb);
+        System.out.println("Message read from file: " + sb);
         return decrypt(sb.toString(), key);
 
     }
